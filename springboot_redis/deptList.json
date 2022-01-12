@@ -1,0 +1,134 @@
+ [
+    {
+      "deptId": 101,
+      "deptName": "研发部门",
+      "orderNum": 1,
+      "status": "0",
+      "delFlag": "0",
+      "createBy": "Enzo",
+      "createTime": "2018-03-16 11:33:00",
+      "updateBy": "Enzo",
+      "updateTime": "2018-03-16 11:33:00"
+    },
+    {
+      "deptId": 102,
+      "deptName": "市场部门",
+      "orderNum": 2,
+      "status": "0",
+      "delFlag": "0",
+      "createBy": "Enzo",
+      "createTime": "2018-03-16 11:33:00",
+      "updateBy": "Enzo",
+      "updateTime": "2018-03-16 11:33:00"
+    },
+    {
+      "deptId": 103,
+      "deptName": "测试部门",
+      "orderNum": 3,
+      "status": "0",
+      "delFlag": "0",
+      "createBy": "Enzo",
+      "createTime": "2018-03-16 11:33:00",
+      "updateBy": "Enzo",
+      "updateTime": "2020-12-24 10:27:48"
+    },
+    {
+      "deptId": 104,
+      "deptName": "财务部门",
+      "orderNum": 4,
+      "status": "0",
+      "delFlag": "0",
+      "createBy": "Enzo",
+      "createTime": "2018-03-16 11:33:00",
+      "updateBy": "Enzo",
+      "updateTime": "2018-03-16 11:33:00"
+    },
+    {
+      "deptId": 105,
+      "deptName": "运维部门",
+      "orderNum": 5,
+      "status": "0",
+      "delFlag": "0",
+      "createBy": "Enzo",
+      "createTime": "2018-03-16 11:33:00",
+      "updateBy": "Enzo",
+      "updateTime": "2018-03-16 11:33:00"
+    },
+    {
+      "deptId": 108,
+      "deptName": "人力资源部",
+      "orderNum": 8,
+      "status": "0",
+      "delFlag": "0",
+      "createBy": "chenjian",
+      "createTime": "2021-12-07 15:24:24",
+      "updateBy": "zyk",
+      "updateTime": "2021-12-08 20:53:30"
+    },
+    {
+      "deptId": 112,
+      "deptName": "kkk",
+      "orderNum": null,
+      "status": null,
+      "delFlag": null,
+      "createBy": "zyk",
+      "createTime": null,
+      "updateBy": null,
+      "updateTime": null
+    },
+    {
+      "deptId": 118,
+      "deptName": "pppp",
+      "orderNum": 5,
+      "status": "0",
+      "delFlag": null,
+      "createBy": null,
+      "createTime": "2021-12-15 09:59:46",
+      "updateBy": "zyk",
+      "updateTime": "2021-12-15 12:20:32"
+    },
+    {
+      "deptId": 119,
+      "deptName": "gggg",
+      "orderNum": 9,
+      "status": "0",
+      "delFlag": null,
+      "createBy": "zyk",
+      "createTime": "2021-12-15 11:54:49",
+      "updateBy": "zyk",
+      "updateTime": "2021-12-15 12:20:49"
+    },
+    {
+      "deptId": 120,
+      "deptName": "bbbb",
+      "orderNum": 2,
+      "status": "0",
+      "delFlag": null,
+      "createBy": "zyk",
+      "createTime": "2021-12-15 13:00:27",
+      "updateBy": "zyk",
+      "updateTime": "2021-12-15 13:01:13"
+    },
+    {
+      "deptId": 123,
+      "deptName": "yyyy",
+      "orderNum": 888,
+      "status": "0",
+      "delFlag": null,
+      "createBy": "zyk",
+      "createTime": "2021-12-16 15:44:57",
+      "updateBy": null,
+      "updateTime": null
+    },
+    {
+      "deptId": 124,
+      "deptName": "填啥是",
+      "orderNum": null,
+      "status": null,
+      "delFlag": null,
+      "createBy": null,
+      "createTime": null,
+      "updateBy": null,
+      "updateTime": null
+    }
+  ]

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yun.dao.QuestionDao">
+
+    <resultMap type="com.yun.entity.Question" id="QuestionMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="question" column="question" jdbcType="VARCHAR"/>
+        <result property="optionA" column="option_a" jdbcType="VARCHAR"/>
+        <result property="optionB" column="option_b" jdbcType="VARCHAR"/>
+        <result property="optionC" column="option_c" jdbcType="VARCHAR"/>
+        <result property="optionD" column="option_d" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="updater" column="updater" jdbcType="VARCHAR"/>
+        <result property="flag" column="flag" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="QuestionMap">
+        select
+          id, question, option_a, option_b, option_c, option_d, type, status, create_time, creator, update_time, updater, flag
+        from tbl_question
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="QuestionMap">
+        select
+          id, question, option_a, option_b, option_c, option_d, type, status, create_time, creator, update_time, updater, flag
+        from tbl_question
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="question != null and question != ''">
+                and question = #{question}
+            </if>
+            <if test="optionA != null and optionA != ''">
+                and option_a = #{optionA}
+            </if>
+            <if test="optionB != null and optionB != ''">
+                and option_b = #{optionB}
+            </if>
+            <if test="optionC != null and optionC != ''">
+                and option_c = #{optionC}
+            </if>
+            <if test="optionD != null and optionD != ''">
+                and option_d = #{optionD}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="updater != null and updater != ''">
+                and updater = #{updater}
+            </if>
+            <if test="flag != null">
+                and flag = #{flag}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from tbl_question
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="question != null and question != ''">
+                and question = #{question}
+            </if>
+            <if test="optionA != null and optionA != ''">
+                and option_a = #{optionA}
+            </if>
+            <if test="optionB != null and optionB != ''">
+                and option_b = #{optionB}
+            </if>
+            <if test="optionC != null and optionC != ''">
+                and option_c = #{optionC}
+            </if>
+            <if test="optionD != null and optionD != ''">
+                and option_d = #{optionD}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="updater != null and updater != ''">
+                and updater = #{updater}
+            </if>
+            <if test="flag != null">
+                and flag = #{flag}
+            </if>
+        </where>
+    </select>
+    <select id="queryAll" resultMap="QuestionMap">
+        select * from tbl_question
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into tbl_question(question, option_a, option_b, option_c, option_d, type, status, create_time, creator, update_time, updater, flag)
+        values (#{question}, #{optionA}, #{optionB}, #{optionC}, #{optionD}, #{type}, #{status}, #{createTime}, #{creator}, #{updateTime}, #{updater}, #{flag})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into tbl_question(question, option_a, option_b, option_c, option_d, type, status, create_time, creator, update_time, updater, flag)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.question}, #{entity.optionA}, #{entity.optionB}, #{entity.optionC}, #{entity.optionD}, #{entity.type}, #{entity.status}, #{entity.createTime}, #{entity.creator}, #{entity.updateTime}, #{entity.updater}, #{entity.flag})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into tbl_question(question, option_a, option_b, option_c, option_d, type, status, create_time, creator, update_time, updater, flag)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.question}, #{entity.optionA}, #{entity.optionB}, #{entity.optionC}, #{entity.optionD}, #{entity.type}, #{entity.status}, #{entity.createTime}, #{entity.creator}, #{entity.updateTime}, #{entity.updater}, #{entity.flag})
+        </foreach>
+        on duplicate key update
+        question = values(question),
+        option_a = values(option_a),
+        option_b = values(option_b),
+        option_c = values(option_c),
+        option_d = values(option_d),
+        type = values(type),
+        status = values(status),
+        create_time = values(create_time),
+        creator = values(creator),
+        update_time = values(update_time),
+        updater = values(updater),
+        flag = values(flag)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update tbl_question
+        <set>
+            <if test="question != null and question != ''">
+                question = #{question},
+            </if>
+            <if test="optionA != null and optionA != ''">
+                option_a = #{optionA},
+            </if>
+            <if test="optionB != null and optionB != ''">
+                option_b = #{optionB},
+            </if>
+            <if test="optionC != null and optionC != ''">
+                option_c = #{optionC},
+            </if>
+            <if test="optionD != null and optionD != ''">
+                option_d = #{optionD},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="creator != null and creator != ''">
+                creator = #{creator},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updater != null and updater != ''">
+                updater = #{updater},
+            </if>
+            <if test="flag != null">
+                flag = #{flag},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from tbl_question where id = #{id}
+    </delete>
+
+</mapper>
+
