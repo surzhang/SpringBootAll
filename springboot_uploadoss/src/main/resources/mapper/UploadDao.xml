@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yun.dao.UploadDao">
+    <resultMap type="com.yun.entity.Upload" id="UploadMap">
+        <result property="uploadId" column="upload_id" jdbcType="INTEGER"/>
+        <result property="sourceName" column="source_name" jdbcType="VARCHAR"/>
+        <result property="destinationName" column="destination_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UploadMap">
+        select
+          upload_id, source_name, destination_name
+        from tbl_upload
+        where upload_id = #{uploadId}
+    </select>
+
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from tbl_upload
+        <where>
+            <if test="uploadId != null">
+                and upload_id = #{uploadId}
+            </if>
+            <if test="sourceName != null and sourceName != ''">
+                and source_name = #{sourceName}
+            </if>
+            <if test="destinationName != null and destinationName != ''">
+                and destination_name = #{destinationName}
+            </if>
+        </where>
+    </select>
+    <select id="queryAll" resultMap="UploadMap">
+        select * from tbl_upload
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="uploadId" useGeneratedKeys="true">
+        insert into tbl_upload(source_name, destination_name)
+        values (#{sourceName}, #{destinationName})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="uploadId" useGeneratedKeys="true">
+        insert into tbl_upload(source_name, destination_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.sourceName}, #{entity.destinationName})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="uploadId" useGeneratedKeys="true">
+        insert into tbl_upload(source_name, destination_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.sourceName}, #{entity.destinationName})
+        </foreach>
+        on duplicate key update
+        source_name = values(source_name),
+        destination_name = values(destination_name)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update tbl_upload
+        <set>
+            <if test="sourceName != null and sourceName != ''">
+                source_name = #{sourceName},
+            </if>
+            <if test="destinationName != null and destinationName != ''">
+                destination_name = #{destinationName},
+            </if>
+        </set>
+        where upload_id = #{uploadId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from tbl_upload where upload_id = #{uploadId}
+    </delete>
+
+</mapper>
+

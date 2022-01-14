@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页></title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script src="/layui/layui.js"></script>
+    <!--    引入jquery-->
+    <script src="/jquery/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<form class="layui-form" id="add" style="display: none" lay-filter="formDemo">
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="username" id="username" lay-verify="title" autocomplete="off" placeholder="请输入姓名"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">手机号</label>
+        <div class="layui-input-block">
+            <input type="text" name="phone" id="phone" lay-verify="required" placeholder="请输入手机号" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+</form>
+<h1 style="font-family: 楷体;color: #00F7DE">显示所有的问题</h1>
+<table id="demo" lay-filter="test"></table>
+<script type="text/html" id="navBar">
+    <a class="layui-btn layui-btn-primary layui-border-green" lay-event="add">添加</a>
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+</body>
+<script type="text/javascript" th:inline="none">
+    layui.use(['table', 'form'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        //第一个实例
+        var tableName = table.render({
+            elem: '#demo'
+            , height: 600
+            , url: '/tester/selectAll' //数据接口
+            , page: true //开启分页
+            , toolbar: '#navBar'
+            , limit: 5
+            , limits: [5, 10, 15, 20, 25, 30]
+            , cols: [
+                [ //表头
+                    {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+                    , {field: 'phone', title: '手机号', width: 120}
+                    , {field: 'username', title: '测试人', width: 120}
+                    , {field: 'testTime', title: '测试时间', width: 120}
+                    , {fixed: 'right', title: '操作', align: 'center', toolbar: '#barDemo'}
+                ]
+            ]
+        });
+        table.on('toolbar(test)', function (obj) {
+            switch (obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 1
+                        , area: ['500px', '600px']
+                        , title: '添加数据'
+                        , content: $("#add")
+                        , shade: 0
+                        , btn: ['确定', '取消']
+                        , success: function (data) {
+                            $("#add")[0].reset();
+                            form.render();
+                        }
+                        , btn1: function (index, layer0) {
+                            var jsonData = {
+                                username: $("#username").val(),
+                                phone: $("#phone").val()
+                            };
+                            $.ajax({
+                                url: "/tester/insert",
+                                data: JSON.stringify(jsonData),
+                                type: "post",
+                                success: function (data) {
+                                    //成功后的回调函数
+                                    if (data.code == 0) {
+                                        layer.msg('增加成功');
+                                        layer.close(index);
+                                        table.reload('demo', {
+                                            page: {
+                                                curr: tableName.config.page.pages
+                                            }
+                                        })
+                                        $("#add")[0].reset();
+                                        form.render();
+                                    } else {
+                                        layer.msg('增加失败');
+                                        layer.close(index);
+                                        table.reload('demo', {
+                                            page: {
+                                                curr: tableName.config.page.curr
+                                            }
+                                        });
+                                    }
+                                },
+                                dataType: "json",
+                                contentType: 'application/json;charset=UTF-8'
+                            });
+                            $("#add").css("display", "none");
+                        }
+                        , btn2: function () {
+                            $("#add").css("display", "none");
+                        }
+                        , cancel: function (layer0, index) {
+                            $("#add").css("display", "none");
+                            layer.closeAll();
+                        }
+                    });
+            }
+        });
+        //修改和删除
+        table.on('tool(test)', function (obj) {
+            var data = obj.data,
+                layEvent = obj.event;
+            console.log(data);
+            if (layEvent === 'edit') {
+                layer.open({
+                    type: 1
+                    , area: ['500px', '600px']
+                    , title: '修改数据'
+                    , content: $("#add")
+                    , shade: 0
+                    , btn: ['确定', '取消']
+                    , success: function (layer0, index) {
+                        form.render();
+                        $("#username").val(data.username)
+                        $("#phone").val(data.phone);
+                    }
+                    , btn1: function (index, layer0) {
+                        var jd = {
+                            id: data.id,
+                            username: $("#username").val(),
+                            phone: $("#phone").val(),
+                        };
+                        $.ajax({
+                            url: "/tester/update",
+                            data: JSON.stringify(jd),
+                            type: "put",
+                            success: function (data) {
+                                //成功后的回调函数
+                                if (data.code == 0) {
+                                    layer.msg('修改成功');
+                                } else {
+                                    layer.msg('修改失败');
+                                }
+                                layer.close(index);
+                                table.reload('demo', {
+                                    page: {
+                                        curr: tableName.config.page.curr
+                                    }
+                                });
+                            },
+                            dataType: "json",
+                            contentType: 'application/json;charset=UTF-8'
+                        });
+                        $("#add").css("display", "none");
+                    }
+                    , btn2: function () {
+                        $("#add").css("display", "none");
+                    }
+                    , cancel: function (layer0, index) {
+                        $("#add").css("display", "none");
+                        layer.closeAll();
+                    }
+                });
+            } else if (layEvent === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    //向服务端发送删除指令
+                    $.ajax({
+                        url: "/tester/delete",
+                        data: {id: data.id},
+                        type: "delete",
+                        success: function (result) {
+                            //成功后的回调函数
+                            if (result.code == 0) {
+                                obj.del(); //删除对应行（tr）的DOM结构
+                                layer.msg('删除成功');
+                            } else {
+                                layer.msg('删除失败');
+                            }
+                            layer.close(index);
+                            table.reload('demo', {
+                                page: {
+                                    curr: tableName.config.page.curr
+                                }
+                            })
+                        }
+                    })
+                })
+            }
+        })
+    });
+</script>
+</html>

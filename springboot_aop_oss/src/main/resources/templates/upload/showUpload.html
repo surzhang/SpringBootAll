@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>上传文件</title>
+    <!--    引入layui-->
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script src="/layui/layui.js"></script>
+</head>
+<body>
+<!--头工具-->
+<script type="text/html" id="barDemo">
+    <button type="button" class="layui-btn" id="test1">
+        <i class="layui-icon">&#xe67c;</i>上传图片
+    </button>
+    <a class="layui-btn layui-btn-xs layui-btn-danger " lay-event="delete"><i class="layui-icon layui-icon-delete"></i>删除</a>
+</script>
+<!--行工具-->
+<script type="text/html" id="rowBarDemo">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="update">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!--数据表格-->
+<table id="demo" lay-filter="test"></table>
+</body>
+<script>
+    layui.use(['table', 'jquery', 'upload'], function () {
+        let table = layui.table;
+        let upload = layui.upload;
+        let myTable = table.render({
+            elem: '#demo'
+            , height: 500
+            , url: '/upload/queryAll' //数据接口
+            , page: false//开启分页
+            , toolbar: '#barDemo'
+            , cols: [
+                [ //表头
+                    {type: 'checkbox', fixed: 'left'}
+                    , {field: 'uploadId', title: 'ID', width: 80, sort: true, fixed: 'left'}
+                    , {field: 'sourceName', title: '文件名', width: 120, sort: true}
+                    , {
+                    field: 'destinationName', title: '图片', width: 120,
+                    templet: function (d) {
+                        //得到当前行数据，并拼接成自定义模板
+                        return "<img src='" + d.destinationName + "'>"
+                    }
+                }
+                    , {fixed: 'right', title: '操作', width: 120, align: 'center', toolbar: '#rowBarDemo'}
+                ]
+            ]
+        });
+
+        //执行实例
+        let uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            , url: '/upload/insert' //上传接口
+            , done: function (res) {
+                console.log(res)
+                // 刷新表格数据
+                myTable.reload();
+
+            }
+            , error: function () {
+                console.log("文件上传失败")
+            }
+
+        });
+
+    })
+</script>
+</html>
