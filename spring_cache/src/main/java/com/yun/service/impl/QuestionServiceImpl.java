@@ -69,7 +69,8 @@ public class QuestionServiceImpl implements QuestionService {
      */
    // @CachePut(key = "#root.methodName+'_'+#question.id")
     //#root.target调用对象   #root.targetClass获取类的全路径
-    @CachePut(key = "#root.targetClass+'_'+#question.id")
+    //@CachePut(key = "#root.targetClass+'_'+#question.id")
+    @CacheEvict(key = "#question.id",allEntries = true,beforeInvocation = false)
     @Override
     public Question insert(Question question) {
         this.questionDao.insert(question);
@@ -82,7 +83,8 @@ public class QuestionServiceImpl implements QuestionService {
      * @param question 实例对象
      * @return 实例对象
      */
-    @CachePut(key = "#question.id")
+    //@CachePut(key = "#question.id")
+    @CacheEvict(key = "#question.id",allEntries = true,beforeInvocation = false)
     @Override
     public Question update(Question question) {
         this.questionDao.update(question);
@@ -91,11 +93,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     /**
      * 通过主键删除数据
-     *
+     *allEntries = true 删除命名空间下的所有缓存
+     *beforeInvocation = true 先删除缓存
      * @param id 主键
      * @return 是否成功
      */
-    @CacheEvict(key = "#id")
+    @CacheEvict(key = "#id",allEntries = true,beforeInvocation = false)
     @Override
     public boolean deleteById(Integer id) {
         return this.questionDao.deleteById(id) > 0;

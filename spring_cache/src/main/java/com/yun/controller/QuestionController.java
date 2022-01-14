@@ -1,6 +1,7 @@
 package com.yun.controller;
 
 import com.yun.entity.Question;
+import com.yun.entity.ReturnBean;
 import com.yun.service.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("question")
-public class QuestionController {
+public class QuestionController extends BaseController{
     /**
      * 服务对象
      */
@@ -37,7 +39,7 @@ public class QuestionController {
         return ResponseEntity.ok(this.questionService.queryByPage(question, pageRequest));
     }
 
-    @GetMapping("/findAll")
+    @GetMapping("findAll")
     public ResponseEntity<List<Question>> queryAll() {
         return ResponseEntity.ok(this.questionService.queryAll());
     }
@@ -59,9 +61,14 @@ public class QuestionController {
      * @param question 实体
      * @return 新增结果
      */
-    @PostMapping
-    public ResponseEntity<Question> add(Question question) {
-        return ResponseEntity.ok(this.questionService.insert(question));
+    @PostMapping("insert")
+    public ReturnBean insert( Question question) {
+        Question insert = this.questionService.insert(question);
+        if (insert!=null) {
+            return super.success(question);
+        } else {
+            return super.fail(question);
+        }
     }
 
     /**
@@ -70,9 +77,15 @@ public class QuestionController {
      * @param question 实体
      * @return 编辑结果
      */
-    @PutMapping
-    public ResponseEntity<Question> edit(Question question) {
-        return ResponseEntity.ok(this.questionService.update(question));
+    @PutMapping("/update")
+    public ReturnBean update( @RequestBody Question question) {
+        question.setUpdateTime(new Date());
+        Question update = this.questionService.update(question);
+        if (update!=null) {
+            return super.success(question);
+        } else {
+            return super.fail(question);
+        }
     }
 
     /**
@@ -81,9 +94,14 @@ public class QuestionController {
      * @param id 主键
      * @return 删除是否成功
      */
-    @DeleteMapping
-    public ResponseEntity<Boolean> deleteById(Integer id) {
-        return ResponseEntity.ok(this.questionService.deleteById(id));
+    @DeleteMapping("/delete")
+    public ReturnBean delete(int id) {
+        boolean delete = this.questionService.deleteById(id);
+        if (delete) {
+            return super.success(null);
+        } else {
+            return super.fail(null);
+        }
     }
 
 }
